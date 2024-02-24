@@ -1,9 +1,15 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthDto, RegisterDto } from './dtos';
 import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { JwtService } from '@nestjs/jwt';
+import { jwtConstants } from './constants';
 
 @Injectable()
 export class AuthService {
@@ -12,14 +18,14 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(dto: AuthDto): Promise<{ access_token: string }> {
+  async login(dto: AuthDto) {
     const user = await this.prisma.user.findUnique({
       where: {
         username: dto.username,
       },
     });
     if (!user) {
-      throw new ForbiddenException('username and password mismatch.');
+      throw new NotFoundException('username not found.');
     }
     const auth = await argon.verify(user.password, dto.password);
     if (!auth) {
@@ -54,6 +60,17 @@ export class AuthService {
         }
       }
       throw error;
+    }
+  }
+
+  async decode_token(token: string) {
+    try {
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: jwtConstants.secret,
+      });
+      return payload;
+    } catch (e) {
+      throw new UnauthorizedException();
     }
   }
 }
