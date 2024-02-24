@@ -3,13 +3,17 @@ import {
   Get,
   NotFoundException,
   Param,
+  Patch,
   Put,
   Query,
+  Req,
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { JwtGuard } from 'src/auth/guard';
+import { JwtGuard, RoleGuard } from 'src/auth/guard';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Roles } from './role.decorator';
+import { Role } from './enum/role.enum';
 
 @UseGuards(JwtGuard)
 @Controller('user')
@@ -23,7 +27,6 @@ export class UserController {
 
   @Get('profile')
   getProfile(@Query('username') username: string) {
-    console.log(username);
     return this.prismaService.user.findUnique({
       where: {
         username: username,
@@ -44,7 +47,7 @@ export class UserController {
     }
   }
 
-  @Put(':id')
+  @Patch(':id/update')
   async updateUser(@Param() params) {
     try {
       return await this.prismaService.user.update({
@@ -59,6 +62,24 @@ export class UserController {
       });
     } catch {
       throw new UnauthorizedException();
+    }
+  }
+
+  @Patch(':id/role')
+  @Roles(Role.Moderator)
+  @UseGuards(RoleGuard)
+  async updateUserRole(@Param() params, @Req() req) {
+    try {
+      return await this.prismaService.user.update({
+        data: {
+          role: req.body.role,
+        },
+        where: {
+          id: parseInt(params.id),
+        },
+      });
+    } catch {
+      throw new UnauthorizedException('unauthorized request');
     }
   }
 }

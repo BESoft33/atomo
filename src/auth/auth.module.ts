@@ -4,7 +4,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { jwtConstants } from './constants';
 // import { APP_GUARD } from '@nestjs/core';
-// import { AuthGuard } from './auth.guard';
+// import { AuthGuard } from './guard';
 import { JwtStrategy } from './strategy';
 
 @Module({
@@ -22,7 +22,7 @@ import { JwtStrategy } from './strategy';
     //   provide: APP_GUARD,
     //   useClass: AuthGuard,
     // },
-    JwtStrategy,
+    JwtStrategy, //AuthGuard could be use instead
   ],
   exports: [AuthService],
 })

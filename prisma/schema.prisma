@@ -26,29 +26,29 @@ enum Role {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  email     String   @unique 
+  id        Int       @id @default(autoincrement())
+  username  String    @unique
+  email     String    @unique
   password  String
   firstName String
   lastname  String?
   role      Role?
-  updated   Vechile[]
+  drive     Vechile[] @relation(name: "DriverRelation")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Vechile {
-  id                 Int      @id @default(autoincrement())
+  id                 Int       @id @default(autoincrement())
   model              String
   buildYear          DateTime
   buyYear            DateTime
-  registrationNumber String   @unique
-  currentStatus      Status   @default(ACTIVE)
+  registrationNumber String    @unique
+  currentStatus      Status    @default(ACTIVE)
   location           String
-  updatedBy          User?    @relation(fields: [moderatorId], references: [id])
-  moderatorId        Int      @unique
+  driver             User?     @relation(name: "DriverRelation", fields: [driverId], references: [id])
+  driverId           Int?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
