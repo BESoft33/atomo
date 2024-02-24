@@ -22,7 +22,7 @@ enum Status {
 enum Role {
   DRIVER
   MECHANIC
-  OWNER
+  MODERATOR
 }
 
 model User {
@@ -33,7 +33,7 @@ model User {
   firstName String
   lastname  String?
   role      Role?
-  vechile   Vechile[]
+  updated   Vechile[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -47,8 +47,8 @@ model Vechile {
   registrationNumber String   @unique
   currentStatus      Status   @default(ACTIVE)
   location           String
-  owner              User     @relation(fields: [ownerId], references: [id])
-  ownerId            Int      @unique
+  updatedBy          User?    @relation(fields: [moderatorId], references: [id])
+  moderatorId        Int      @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
