@@ -4,7 +4,6 @@ import {
   NotFoundException,
   Param,
   Patch,
-  Put,
   Query,
   Req,
   UnauthorizedException,
