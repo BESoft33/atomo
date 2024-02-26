@@ -3,6 +3,7 @@ import {
   IsEnum,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
 } from 'class-validator';
 import { Status } from '../enums/vechile.status';
@@ -29,9 +30,10 @@ export class CreateVechileDto {
   currentStatus: Status;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   location: string;
 
   @IsNumber()
+  @IsOptional()
   driverId: number;
 }

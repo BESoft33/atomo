@@ -31,7 +31,6 @@ export class VechileService {
   }
 
   async createVechile(dto: CreateVechileDto) {
-    console.log(dto);
     try {
       return await this.prismaService.vechile.create({
         data: {
@@ -79,11 +78,11 @@ export class VechileService {
     }
   }
 
-  async assignDriver(dto: AssignDriverDto, param) {
+  async assignDriver(dto: AssignDriverDto, id) {
     try {
       return await this.prismaService.vechile.update({
         where: {
-          id: parseInt(param.id),
+          id: id,
         },
         data: {
           driverId: dto.driverId,

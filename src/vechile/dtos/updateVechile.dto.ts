@@ -1,15 +1,16 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Status } from '../enums/vechile.status';
 
 export class UpdateVechileDto {
   @IsEnum(Status)
-  @IsNotEmpty()
+  @IsOptional()
   currentStatus: Status;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   location: string;
 
   @IsNumber()
+  @IsOptional()
   driverId: number;
 }

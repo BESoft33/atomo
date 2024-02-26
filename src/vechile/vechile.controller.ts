@@ -7,6 +7,7 @@ import {
   Patch,
   Body,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { Role } from '../user/enum/role.enum';
 import { JwtGuard, RoleGuard } from 'src/auth/guard';
@@ -25,8 +26,8 @@ export class VechileController {
   }
 
   @Get(':id')
-  findOne(@Param() params) {
-    return this.vechileService.findOne(params);
+  findOne(@Param('id', ParseIntPipe) id) {
+    return this.vechileService.findOne(id);
   }
 
   @Roles(Role.Moderator)
@@ -39,21 +40,21 @@ export class VechileController {
   @Roles(Role.Moderator)
   @UseGuards(RoleGuard)
   @Patch(':id')
-  update(@Body() dto: UpdateVechileDto, @Param() params) {
-    return this.vechileService.updateVehicle(dto, parseInt(params.id));
+  update(@Body() dto: UpdateVechileDto, @Param('id', ParseIntPipe) id:number) {
+    return this.vechileService.updateVehicle(dto, id);
   }
 
   @Roles(Role.Moderator)
   @UseGuards(RoleGuard)
   @Delete(':id')
-  delete(@Param() param) {
-    return this.vechileService.deleteVechile(parseInt(param.id));
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return this.vechileService.deleteVechile(id);
   }
 
   @Roles(Role.Moderator)
   @UseGuards(RoleGuard)
   @Patch(':id/assign-driver')
-  assignDriver(@Body() dto: AssignDriverDto, @Param() param) {
-    return this.vechileService.assignDriver(dto, param);
+  assignDriver(@Body() dto: AssignDriverDto, @Param('id', ParseIntPipe) id) {
+    return this.vechileService.assignDriver(dto, id);
   }
 }
