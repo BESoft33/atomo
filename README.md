@@ -35,6 +35,12 @@ $ yarn install
 ## Running the app
 
 ```bash
+# docker create container
+$ yarn db:dev:up
+
+# create database and migrate
+$ yarn prisma:dev:deploy 
+
 # development
 $ yarn run start
 
@@ -44,29 +50,75 @@ $ yarn run start:dev
 # production mode
 $ yarn run start:prod
 ```
-
-## Test
-
+## Testing API endpoints
 ```bash
-# unit tests
-$ yarn run test
+# Auth
+Signup: /auth/signup
 
-# e2e tests
-$ yarn run test:e2e
+Login: /auth/login
 
-# test coverage
-$ yarn run test:cov
+# User CRUD operations
+# Requires Authorization header
+
+Retrive all: GET $ /user
+
+Profile: GET $ /user/profile?username=user
+
+Retrive one: GET $ /user/:id
+
+
+Update: PATCH $ /user/:id
+body:
+{
+  'email': email,
+  'firstname': firstname,
+  'lastname': lastname
+}
+
+Update user role: PATCH $ /user/:id/role
+Requires role MODERATOR
+Takes one of USER, MODERATOR, MECHANIC, DRIVER
+body:
+{
+  'role': role
+}
+
+
+#Vechile endpoints
+Retrieve all: GET /vechile
+
+Fine one: /vechile/:id
+
+Create: POST /vechile/new
+
+{
+  'model': model,
+  'buildYear': buildYear,
+  'buyYear': buyYear,
+  'registrationNumber': registrationNumber,
+  'currentStatus': currentStatus,
+  'location': location,
+  'driverId': driverId,
+}
+
+#Requires MODERATOR role
+
+Update: PATCH /vechile/:id
+{
+  'currentStatus': currentStatus,
+  'location': location,
+  'driverId': driverId
+}
+
+Delete: DELETE /vechile/:id
+
+Assign Driver: PATCH /vechile/:id/assign-driver
+{
+  'driverId': id
+}
+
+
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
